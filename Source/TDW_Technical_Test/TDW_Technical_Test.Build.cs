@@ -8,6 +8,17 @@ public class TDW_Technical_Test : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput" });
-    }
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", 
+	        "CoreUObject", 
+	        "Engine", 
+	        "InputCore", 
+	        "NavigationSystem",
+	        "AIModule", 
+	        "Niagara",
+	        "EnhancedInput",
+	        "GameplayAbilities",
+	        "GameplayTasks",
+	        "GameplayTags"
+        });
+	}
 }

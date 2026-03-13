@@ -23,7 +23,9 @@ namespace NativeGameplayTags
 	{
 		namespace Combat
 		{
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_Event_Combat_Hit_Detected, "Event.Combat.HitDetected", "")
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_Event_Combat_Hit_React, "Event.Combat.HitReact", "")
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_Event_Combat_Enable_Ragdoll, "Event.Combat.EnableRagdoll", "")
 		}
 	}
 	
@@ -67,6 +69,11 @@ namespace NativeGameplayTags
 			
 			return AbilityTags;
 		}
+	}
+	
+	namespace HitReactType
+	{
+		UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_HitReactType_Light, "HitReactType.Light", "")
 	}
 	
 	namespace Character

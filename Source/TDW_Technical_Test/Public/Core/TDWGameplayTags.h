@@ -30,7 +30,9 @@ namespace NativeGameplayTags
 	{
 		namespace Combat
 		{
+			UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Event_Combat_Hit_Detected)
 			UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Event_Combat_Hit_React)
+			UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_Event_Combat_Enable_Ragdoll)
 		}
 	}
 	namespace Attribute
@@ -69,6 +71,10 @@ namespace NativeGameplayTags
 		const TArray<FGameplayTag>& GetDamageTypeTags();
 	}
 	
+	namespace HitReactType
+	{
+		UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_HitReactType_Light)
+	}
 	namespace Character
 	{
 		namespace Type

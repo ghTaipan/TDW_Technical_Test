@@ -22,4 +22,7 @@ public:
 
 	void AbilityInputPressed(const FGameplayTag& AbilityTag);
 	void AbilityInputReleased(const FGameplayTag& AbilityTag);
+	
+private:
+	bool bAbilitySystemInitialized = false;
 };

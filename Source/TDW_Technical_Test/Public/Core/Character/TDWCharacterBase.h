@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "TDWCharacterBase.generated.h"
 
+class UTDWCharacterAssets;
 struct FTDWAbilitySystemInitializationSpec;
 class UTDWAbilitySystemComponent;
 
@@ -32,6 +33,8 @@ protected:
 	TObjectPtr<UTDWAbilitySystemComponent> AbilitySystemComponent;
 	
 private:
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UTDWCharacterAssets> CharacterAssets;
 	UPROPERTY(EditDefaultsOnly, Category = "Config")
 	FGameplayTagContainer CharacterSpecTags;
 	
@@ -39,4 +42,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
 	const FGameplayTagContainer& GetCharacterSpecTags() const {return CharacterSpecTags;}
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UTDWCharacterAssets* GetCharacterAssets() const {return CharacterAssets;}
 };

@@ -29,6 +29,8 @@ class TDW_TECHNICAL_TEST_API ATDWPlayerController : public APlayerController
 public:
 	ATDWPlayerController();
 
+	bool GetHitUnderCursor(FHitResult& Hit) const;
+	
 	/** Time Threshold to know if it was a short press */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	float ShortPressThreshold;

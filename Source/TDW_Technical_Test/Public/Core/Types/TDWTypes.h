@@ -52,3 +52,12 @@ private:
 	
 	mutable uint32 CachedHash = 0;
 };
+
+USTRUCT(BlueprintType)
+struct FSoundBaseArray
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<USoundBase*> SoundArray;
+};

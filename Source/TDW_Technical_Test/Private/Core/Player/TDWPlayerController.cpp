@@ -82,18 +82,8 @@ void ATDWPlayerController::OnSetDestinationTriggered()
 	
 	// We look for the location in the world where the player has pressed the input
 	FHitResult Hit;
-	bool bHitSuccessful;
-	if (bIsTouch)
-	{
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	}
-	else
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
-
 	// If we hit a surface, cache the location
-	if (bHitSuccessful)
+	if (GetHitUnderCursor(Hit))
 	{
 		CachedDestination = Hit.Location;
 	}
@@ -233,6 +223,21 @@ void ATDWPlayerController::OnGameplayTagChanged(FGameplayTag Tag, int32 Count)
 			Info.bBound = false;
 		}
 	}
+}
+
+bool ATDWPlayerController::GetHitUnderCursor(FHitResult& Hit) const
+{
+	bool bHitSuccessful;
+	if (bIsTouch)
+	{
+		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
+	}
+	else
+	{
+		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+	}
+	
+	return bHitSuccessful;
 }
 
 void ATDWPlayerController::SetPawnASC(UTDWAbilitySystemComponent* ASC)

@@ -36,16 +36,16 @@ void UTDWHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModC
 			if (NewHealth > 0.0f)
 			{
 				Data.Target.TryActivateAbilitiesByTag(FGameplayTagContainer(CharacterState::TAG_Ability_Character_State_Hit_React));
-				
-				FGameplayEventData Payload;
-				Payload.ContextHandle  = Data.EffectSpec.GetContext();
-				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Data.Target.AbilityActorInfo->AvatarActor.Get(),
-					NativeGameplayTags::Event::Combat::TAG_Event_Combat_Hit_React, Payload);
 			}
 			else
 			{
 				Data.Target.TryActivateAbilitiesByTag(FGameplayTagContainer(CharacterState::TAG_Ability_Character_State_Death));
 			}
+			
+			FGameplayEventData Payload;
+			Payload.ContextHandle  = Data.EffectSpec.GetContext();
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Data.Target.AbilityActorInfo->AvatarActor.Get(),
+				NativeGameplayTags::Event::Combat::TAG_Event_Combat_Hit_React, Payload);
 		}
 	}
 }

@@ -3,6 +3,7 @@
 #include "AttributeSet.h"
 #include "GameplayEffectTypes.h"
 #include "ScalableFloat.h"
+#include "TDWDamageTypes.h"
 #include "TDWAbilityTypes.generated.h"
 
 class UGameplayAbility;
@@ -39,7 +40,7 @@ struct FTDWAbilitySystemInitializationSpec
 	
 	// An array of Attribute Sets to create.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSubclassOf<UAttributeSet>> AttributeSets;
+	TArray<TSoftClassPtr<UAttributeSet>> AttributeSets;
 
 	// A map of Attributes / float used to set base values.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -47,11 +48,11 @@ struct FTDWAbilitySystemInitializationSpec
 
 	// An Array of Gameplay Abilities to give.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities;
+	TArray<TSoftClassPtr<UGameplayAbility>> GameplayAbilities;
 
 	// An array of Gameplay Effects to apply.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSubclassOf<UGameplayEffect>> GameplayEffects;
+	TArray<TSoftClassPtr<UGameplayEffect>> GameplayEffects;
 
 	// A container of GameplayTags to apply.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -69,4 +70,29 @@ struct FTDWGameplayEffectContext : public FGameplayEffectContext
 	{
 		return FTDWGameplayEffectContext::StaticStruct();
 	}
+	
+	virtual FTDWGameplayEffectContext* Duplicate() const override
+	{
+		FTDWGameplayEffectContext* NewContext = new FTDWGameplayEffectContext();
+		*NewContext = *this;
+		NewContext->AddActors(Actors);
+		
+		NewContext->DamageSpec = DamageSpec;
+		
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		
+		return NewContext;
+	}
+	
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTDWDamageSpec DamageSpec = FTDWDamageSpec();
+	
+public:
+	FTDWDamageSpec GetDamageSpec() const {return DamageSpec;}
+	void SetDamageSpec(const FTDWDamageSpec& InDamageSpec) {DamageSpec = InDamageSpec;}
 };

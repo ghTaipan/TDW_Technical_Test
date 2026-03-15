@@ -19,3 +19,4 @@ This documentation focuses on the macro-level decisions behind the implementatio
 
 5- CharacterAssets DataAsset:: Created a C++ UDataAsset base with Blueprint derivatives for customizing each character class's assets, keeping the project modular and organized.
 
+6- Widget Controllers: Widget Controllers function as a bridge between the Ability System and the UI. Their main job is to broadcast data updates (attribute changes in our case) directly to the interface.

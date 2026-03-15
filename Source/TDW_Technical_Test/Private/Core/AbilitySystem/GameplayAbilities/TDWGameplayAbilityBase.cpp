@@ -25,22 +25,25 @@ void UTDWGameplayAbilityBase::OnAvatarSet(const FGameplayAbilityActorInfo* Actor
 {
 	Super::OnAvatarSet(ActorInfo, Spec);
 	
-	BaseCharacter = Cast<ATDWCharacterBase>(ActorInfo->AvatarActor);
-	ASC = Cast<UTDWAbilitySystemComponent>(ActorInfo->AbilitySystemComponent);
+	BaseCharacter = MakeWeakObjectPtr(Cast<ATDWCharacterBase>(ActorInfo->AvatarActor));
+	ASC = MakeWeakObjectPtr(Cast<UTDWAbilitySystemComponent>(ActorInfo->AbilitySystemComponent));
 	
 	DefaultDamageSpec.DamageLevel = GetAbilityLevel();
 }
 
 void UTDWGameplayAbilityBase::SetMontageToPlay_Implementation(UAnimMontage* InMontage)
 {
-	MontageToPlay = InMontage;
+	MontageToPlay = MakeWeakObjectPtr(InMontage);
 }
 
 FGameplayEffectContextHandle UTDWGameplayAbilityBase::ApplyDamageEffectFromSpec(const FGameplayEffectContextHandle& EffectContext) const
 {
 	FTDWDamageSpec TempDamageSpec = DefaultDamageSpec;
 	TempDamageSpec.DamageApplier = BaseCharacter;
-	TempDamageSpec.DamageReceiver = Cast<AActor>(EffectContext.GetSourceObject());
+	if (const FHitResult* Hit = EffectContext.GetHitResult())
+	{
+		TempDamageSpec.DamageReceiver = MakeWeakObjectPtr(Hit->GetActor());
+	}
 	
 	return UTDWAbilitySystemBlueprintLibrary::ApplyDamageEffect(TempDamageSpec, EffectContext);
 }

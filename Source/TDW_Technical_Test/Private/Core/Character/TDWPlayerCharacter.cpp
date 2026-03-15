@@ -5,7 +5,10 @@
 
 #include "Camera/CameraComponent.h"
 #include "Core/AbilitySystem/TDWAbilitySystemComponent.h"
+#include "Core/AbilitySystem/Types/TDWAbilityTypes.h"
+#include "Core/Library/TDWBlueprintFunctionLibrary.h"
 #include "Core/Player/TDWPlayerController.h"
+#include "Core/UI/TDWHUD.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ATDWPlayerCharacter::ATDWPlayerCharacter()
@@ -29,6 +32,33 @@ ATDWPlayerCharacter::ATDWPlayerCharacter()
 	
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
+}
+
+void ATDWPlayerCharacter::InitializeAbilitySystem(const FTDWAbilitySystemInitializationSpec& InitData)
+{
+	Super::InitializeAbilitySystem(InitData);
+	
+	const APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (!IsValid(PlayerController))
+	{
+		return;
+	}
+
+	ATDWHUD* TDWHUD = Cast<ATDWHUD>(PlayerController->GetHUD());
+	if (IsValid(TDWHUD))
+	{
+		TArray<const UAttributeSet*> AttributeSets;
+		for (TSoftClassPtr<UAttributeSet> Elem : InitData.AttributeSets)
+		{
+			const UAttributeSet* AS = AbilitySystemComponent->GetAttributeSet(UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(Elem));
+			if (IsValid(AS))
+			{
+				AttributeSets.Add(AS);
+			}
+		}
+		
+		TDWHUD->InitOverlay(AbilitySystemComponent, AttributeSets);
+	}
 }
 
 void ATDWPlayerCharacter::PostInitializeAbilitySystem_Implementation()

@@ -19,6 +19,19 @@ namespace NativeGameplayTags
 		}
 	}
 	
+	namespace Effect
+	{
+		namespace Combat
+		{
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_Effect_Combat_Show_Health_Bar, "Effect.Combat.ShowHealthBar", "")
+		}
+		
+		namespace Cooldown
+		{
+			UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_Effect_Cooldown_LeapSlam, "Effect.Cooldown.LeapSlam", "")
+		}
+	}
+	
 	namespace Event
 	{
 		namespace Combat

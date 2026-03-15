@@ -16,9 +16,6 @@ struct FTDWAttributeInfo
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FText AttributeDescription= FText();
-
-	UPROPERTY(BlueprintReadOnly)
-	float AttributeValue = 0.f;
 };
 
 USTRUCT(BlueprintType)

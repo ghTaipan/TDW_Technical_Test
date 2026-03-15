@@ -62,9 +62,9 @@ FGameplayEffectContextHandle UTDWAbilitySystemBlueprintLibrary::ApplyDamageEffec
 
 FTDWDamageSpec UTDWAbilitySystemBlueprintLibrary::GetDamageSpec(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FTDWGameplayEffectContext* FcEffectContext = static_cast<const FTDWGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FTDWGameplayEffectContext* TDWEffectContext = static_cast<const FTDWGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		return FcEffectContext->GetDamageSpec();
+		return TDWEffectContext->GetDamageSpec();
 	}
 	
 	return FTDWDamageSpec();

@@ -32,11 +32,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UTDWAbilitySystemComponent> AbilitySystemComponent;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Config")
+	FGameplayTagContainer CharacterSpecTags;
+	
 private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UTDWCharacterAssets> CharacterAssets;
-	UPROPERTY(EditDefaultsOnly, Category = "Config")
-	FGameplayTagContainer CharacterSpecTags;
 	
 public:	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;

@@ -12,7 +12,7 @@ void UAnimNotifyState_TraceAndEvent::NotifyBegin(USkeletalMeshComponent* MeshCom
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	
-	OwnerActor = MeshComp->GetOwner();
+	OwnerActor = MakeWeakObjectPtr(MeshComp->GetOwner());
 
 #if WITH_EDITOR
 	if (!OwnerActor.IsValid())
@@ -21,7 +21,7 @@ void UAnimNotifyState_TraceAndEvent::NotifyBegin(USkeletalMeshComponent* MeshCom
 	}
 #endif
 	
-	OwnerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerActor.Get());
+	OwnerASC = MakeWeakObjectPtr(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerActor.Get()));
 	ActorsToIgnore.Add(OwnerActor.Get());
 }
 
@@ -56,8 +56,7 @@ void UAnimNotifyState_TraceAndEvent::NotifyTick(USkeletalMeshComponent* MeshComp
 				
 				FGameplayEventData Payload;
 				Payload.ContextHandle = OwnerASC->MakeEffectContext();
-				Payload.ContextHandle.AddSourceObject(HitActor);
-				Payload.ContextHandle.AddHitResult(Hit, true);
+				Payload.ContextHandle.AddHitResult(Hit);
 				UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor.Get(), EventTag, Payload);
 			}
 		}

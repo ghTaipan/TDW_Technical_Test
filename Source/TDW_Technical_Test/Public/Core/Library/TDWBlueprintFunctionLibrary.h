@@ -17,13 +17,13 @@ class TDW_TECHNICAL_TEST_API UTDWBlueprintFunctionLibrary : public UBlueprintFun
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category="FCFunctionLibrary", meta = (DefaultToSelf = "WorldContextObject"))
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="TDWFunctionLibrary", meta = (DefaultToSelf = "WorldContextObject"))
 	static ATDWGameMode* GetGameMode(const UObject* WorldContextObject);
 	
 	template <typename T>
 	static UClass* LoadAndReturnSoftClass(TSoftClassPtr<T>& SoftClass);
 	
-	UFUNCTION(BlueprintCallable, Category="FCFunctionLibrary")
+	UFUNCTION(BlueprintCallable, Category="TDWFunctionLibrary")
 	static float GetScalableFloatValueAtLevel(const FScalableFloat& ScalableFloat, float Level);
 };
 

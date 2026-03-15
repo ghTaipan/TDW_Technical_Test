@@ -18,6 +18,8 @@ class UInputAction;
 /** Main log category used across the project */
 DECLARE_LOG_CATEGORY_EXTERN(LogTDWCharacter, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHoveredActorDelegate, AActor*, HoveredActor);
+
 /**
  * 
  */
@@ -53,6 +55,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+	
+	UPROPERTY(BlueprintAssignable, Transient)
+	FHoveredActorDelegate OnHoveredActor;
 	
 protected:
 	

@@ -27,6 +27,7 @@ private:
 	class USpringArmComponent* CameraBoom;
 	
 protected:
+	virtual void InitializeAbilitySystem(const FTDWAbilitySystemInitializationSpec& InitData) override;
 	virtual void PostInitializeAbilitySystem_Implementation() override;
 	
 public:

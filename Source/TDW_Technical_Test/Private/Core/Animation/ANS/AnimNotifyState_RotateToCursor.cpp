@@ -10,7 +10,7 @@ void UAnimNotifyState_RotateToCursor::NotifyBegin(USkeletalMeshComponent* MeshCo
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	
-	OwnerPawn = Cast<APawn>(MeshComp->GetOwner());
+	OwnerPawn = MakeWeakObjectPtr(Cast<APawn>(MeshComp->GetOwner()));
 	
 	// This supposed to be null only while displaying the montage in the editor.
 #if WITH_EDITOR

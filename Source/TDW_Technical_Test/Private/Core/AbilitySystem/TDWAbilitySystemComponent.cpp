@@ -28,9 +28,9 @@ void UTDWAbilitySystemComponent::InitializeAbilitySystemData(
 	// Grant Attribute Sets
 	if (!InitializationData.AttributeSets.IsEmpty())
 	{
-		for (TSoftClassPtr<UAttributeSet> SoftAttributeSetClass : InitializationData.AttributeSets)
+		for (const TSubclassOf<UAttributeSet>& AttributeSetClass : InitializationData.AttributeSets)
 		{
-			GetOrCreateAttributeSubobject(UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(SoftAttributeSetClass));
+			GetOrCreateAttributeSubobject(AttributeSetClass);
 		}
 	}
 
@@ -49,15 +49,8 @@ void UTDWAbilitySystemComponent::InitializeAbilitySystemData(
 	// Grant Gameplay Abilities
 	if (!InitializationData.GameplayAbilities.IsEmpty())
 	{
-		for (TSoftClassPtr<UGameplayAbility> SoftGameplayAbilityClass : InitializationData.GameplayAbilities)
+		for (const TSubclassOf<UGameplayAbility>& GameplayAbility : InitializationData.GameplayAbilities)
 		{
-			UClass* GameplayAbilityClass = UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(SoftGameplayAbilityClass);
-			if (!IsValid(GameplayAbilityClass))
-			{
-				continue;
-			}
-			
-			UGameplayAbility* GameplayAbility = Cast<UGameplayAbility>(GameplayAbilityClass->GetDefaultObject());
 			if (!IsValid(GameplayAbility))
 			{
 				continue;
@@ -79,9 +72,8 @@ void UTDWAbilitySystemComponent::InitializeAbilitySystemData(
 	// Apply Gameplay Effects
 	if (!InitializationData.GameplayEffects.IsEmpty())
 	{
-		for (TSoftClassPtr<UGameplayEffect> SoftGameplayEffect : InitializationData.GameplayEffects)
+		for (const TSubclassOf<UGameplayEffect>& GameplayEffect : InitializationData.GameplayEffects)
 		{
-			TSubclassOf<UGameplayEffect> GameplayEffect = UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(SoftGameplayEffect);
 			if (!IsValid(GameplayEffect))
 			{
 				continue;

@@ -14,12 +14,10 @@ void UAnimNotifyState_TraceAndEvent::NotifyBegin(USkeletalMeshComponent* MeshCom
 	
 	OwnerActor = MakeWeakObjectPtr(MeshComp->GetOwner());
 
-#if WITH_EDITOR
 	if (!OwnerActor.IsValid())
 	{
 		return;
 	}
-#endif
 	
 	OwnerASC = MakeWeakObjectPtr(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OwnerActor.Get()));
 	ActorsToIgnore.Add(OwnerActor.Get());
@@ -30,17 +28,16 @@ void UAnimNotifyState_TraceAndEvent::NotifyTick(USkeletalMeshComponent* MeshComp
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 	
-#if WITH_EDITOR
 	if (!(OwnerActor.IsValid() && OwnerASC.IsValid()))
 	{
 		return;
 	}
-#endif
 
 	const EDrawDebugTrace::Type DrawDebugType = bDebug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
 	TArray<FHitResult> OutHits;
 	
-	const FVector ActorLocation = MeshComp->GetOwner()->GetActorLocation();
+	
+	const FVector& ActorLocation = MeshComp->GetSocketLocation(SocketName);
 	const bool bHit = UKismetSystemLibrary::SphereTraceMultiForObjects(MeshComp, ActorLocation, ActorLocation,
 		Radius, HitObjectTypes, false,
 		ActorsToIgnore, DrawDebugType, OutHits, true);

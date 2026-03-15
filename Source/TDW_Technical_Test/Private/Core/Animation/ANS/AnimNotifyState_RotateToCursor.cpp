@@ -12,13 +12,10 @@ void UAnimNotifyState_RotateToCursor::NotifyBegin(USkeletalMeshComponent* MeshCo
 	
 	OwnerPawn = MakeWeakObjectPtr(Cast<APawn>(MeshComp->GetOwner()));
 	
-	// This supposed to be null only while displaying the montage in the editor.
-#if WITH_EDITOR
 	if (!OwnerPawn.IsValid())
 	{
 		return;
 	}
-#endif
 	
 	const ATDWPlayerController* PC = Cast<ATDWPlayerController>(OwnerPawn->GetController());
 	if (IsValid(PC))
@@ -26,10 +23,23 @@ void UAnimNotifyState_RotateToCursor::NotifyBegin(USkeletalMeshComponent* MeshCo
 		FHitResult Hit;
 		if (PC->GetHitUnderCursor(Hit))
 		{
-			const FVector ActorLocation = OwnerPawn->GetActorLocation();
-	
+			const FVector& ActorLocation = OwnerPawn->GetActorLocation();
+			const FVector ActorLocationXY = FVector(ActorLocation.X, ActorLocation.Y, 0);
+			const FVector HitLocationXY = FVector(Hit.Location.X, Hit.Location.Y, 0);
+			
+			FVector TargetDirection;
+			const float DistanceToCursor = FMath::Sqrt(FVector::DistSquared(ActorLocationXY, HitLocationXY));
+			if (DistanceToCursor >= 15.0f)
+			{
+				TargetDirection = (HitLocationXY - ActorLocationXY).GetSafeNormal();
+			}
+			else
+			{
+				TargetDirection = OwnerPawn->GetActorForwardVector();
+			}
+			
 			// For being sure if player clicks very close to the character, the character won't turn into a beyblade.
-			LookAtLocation = ActorLocation + ((Hit.Location - ActorLocation).GetSafeNormal() * 1000.0f);
+			LookAtLocation = ActorLocation + (TargetDirection * 1000.0f);
 		}
 	}
 }
@@ -39,12 +49,10 @@ void UAnimNotifyState_RotateToCursor::NotifyTick(USkeletalMeshComponent* MeshCom
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime, EventReference);
 	
-#if WITH_EDITOR
 	if (!OwnerPawn.IsValid())
 	{
 		return;
 	}
-#endif
 	
 	const FRotator& ActorRotation = OwnerPawn->GetActorRotation();
 	

@@ -75,15 +75,10 @@ protected:
 	void MoveInputPressed(const FInputActionValue& Value);
 
 private:
-	template <typename BoundFunc>
-	void BindAbilityInput(UEnhancedInputComponent* EnhancedInputComponent, FTDWAbilityInputInfo& Info, ETDWAbilityInput InputType, BoundFunc Func);
 	void AbilityInputPressed(FGameplayTag AbilityTag);
 	void AbilityInputReleased(FGameplayTag AbilityTag);
 	
-	void OnGameplayTagChanged(FGameplayTag Tag, int32 Count);
-	
 	TWeakObjectPtr<UTDWAbilitySystemComponent> PawnASC;
-	TArray<FTDWAbilityInputInfo> AbilityInputInfoArray;
 	
 	FVector CachedDestination;
 

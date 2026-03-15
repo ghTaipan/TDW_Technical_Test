@@ -49,17 +49,13 @@ void ATDWPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ATDWPlayerController::OnTouchReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ATDWPlayerController::OnTouchReleased);
 		
-		
-		
 		const ATDWGameMode* GM = UTDWBlueprintFunctionLibrary::GetGameMode(this);
 		if (IsValid(GM))
 		{
-			AbilityInputInfoArray = GM->GetAbilityInputData()->GetAbilityInfoArray();
-			for (FTDWAbilityInputInfo& Info : AbilityInputInfoArray)
+			for (const FTDWAbilityInputInfo& Info : GM->GetAbilityInputData()->GetAbilityInfoArray())
 			{
-				BindAbilityInput(EnhancedInputComponent, Info, Info.InputPressedTriggerType, &ThisClass::AbilityInputPressed);
-				BindAbilityInput(EnhancedInputComponent, Info,  Info.InputReleasedTriggerType, &ThisClass::AbilityInputReleased);
-				Info.bBound = true;
+				EnhancedInputComponent->BindAction(Info.InputAction, Info.InputPressedTriggerType, this, &ATDWPlayerController::AbilityInputPressed, Info.AbilityTag);
+				EnhancedInputComponent->BindAction(Info.InputAction, Info.InputReleasedTriggerType, this, &ATDWPlayerController::AbilityInputReleased, Info.AbilityTag);
 			}
 		}
 	}
@@ -148,35 +144,6 @@ void ATDWPlayerController::MoveInputPressed(const FInputActionValue& Value)
 	ControlledPawn->AddMovementInput(RightDirection, MovementVector.X); // right
 }
 
-template <typename BoundFunc>
-void ATDWPlayerController::BindAbilityInput(UEnhancedInputComponent* EnhancedInputComponent, FTDWAbilityInputInfo& Info,
-	ETDWAbilityInput InputType, BoundFunc Func)
-{
-	ETriggerEvent Trigger;;
-	
-	switch (InputType)
-	{
-	case ETDWAbilityInput::Held:
-		Trigger = ETriggerEvent::Triggered;
-		break;
-	case ETDWAbilityInput::Press:
-		Trigger = ETriggerEvent::Started;
-		break;
-	case ETDWAbilityInput::Release:
-		Trigger = ETriggerEvent::Completed;
-		break;
-	default:
-		Trigger = ETriggerEvent::None;
-		break;
-	}
-
-	if (Trigger != ETriggerEvent::None)
-	{
-		const FEnhancedInputActionEventBinding& Binding = EnhancedInputComponent->BindAction(Info.InputAction, Trigger, this, Func, Info.AbilityTag);
-		(Trigger == ETriggerEvent::Completed ? Info.ReleasedInputBindingHandle : Info.PressedInputBindingHandle) = Binding.GetHandle();;
-	}
-}
-
 void ATDWPlayerController::AbilityInputPressed(FGameplayTag AbilityTag)
 {
 	PawnASC->AbilityInputPressed(AbilityTag);
@@ -187,54 +154,16 @@ void ATDWPlayerController::AbilityInputReleased(FGameplayTag AbilityTag)
 	PawnASC->AbilityInputReleased(AbilityTag);
 }
 
-void ATDWPlayerController::OnGameplayTagChanged(FGameplayTag Tag, int32 Count)
-{
-	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
-	if (!IsValid(EnhancedInputComponent))
-	{
-		return;
-	}
-	
-	const FGameplayTagContainer& OwnedTags = PawnASC->GetOwnedGameplayTags();
-	
-	for (FTDWAbilityInputInfo& Info : AbilityInputInfoArray)
-	{
-		if ((Info.TagsRequiredToBind.IsEmpty() || OwnedTags.HasAll(Info.TagsRequiredToBind)) &&
-			(Info.TagsToBlockBind.IsEmpty() || !OwnedTags.HasAny(Info.TagsToBlockBind)))
-		{
-			if (!Info.bBound)
-			{
-				BindAbilityInput(EnhancedInputComponent, Info, Info.InputPressedTriggerType, &ThisClass::AbilityInputPressed);
-				BindAbilityInput(EnhancedInputComponent, Info, Info.InputReleasedTriggerType, &ThisClass::AbilityInputReleased);
-				Info.bBound = true;
-			}
-		}
-		else if (Info.bBound)
-		{
-			if (Info.PressedInputBindingHandle > 0)
-			{
-				EnhancedInputComponent->RemoveBindingByHandle(Info.PressedInputBindingHandle);
-			}
-			if (Info.ReleasedInputBindingHandle > 0)
-			{
-				EnhancedInputComponent->RemoveBindingByHandle(Info.ReleasedInputBindingHandle);
-			}
-
-			Info.bBound = false;
-		}
-	}
-}
-
 bool ATDWPlayerController::GetHitUnderCursor(FHitResult& Hit) const
 {
 	bool bHitSuccessful;
 	if (bIsTouch)
 	{
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
+		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECC_Visibility, true, Hit);
 	}
 	else
 	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+		bHitSuccessful = GetHitResultUnderCursor(ECC_Visibility, true, Hit);
 	}
 	
 	return bHitSuccessful;
@@ -242,10 +171,5 @@ bool ATDWPlayerController::GetHitUnderCursor(FHitResult& Hit) const
 
 void ATDWPlayerController::SetPawnASC(UTDWAbilitySystemComponent* ASC)
 {
-	PawnASC = ASC;
-	
-	if (PawnASC.IsValid())
-	{
-		PawnASC->RegisterGenericGameplayTagEvent().AddUObject(this, &ThisClass::OnGameplayTagChanged);
-	}
+	PawnASC = MakeWeakObjectPtr(ASC);
 }

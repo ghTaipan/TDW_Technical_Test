@@ -33,7 +33,7 @@ private:
 	TObjectPtr<UTDWAttributeWidgetController> OverlayWidgetController;
 
 	UPROPERTY(EditAnywhere)
-	TSoftClassPtr<UTDWAttributeWidgetController> OverlayWidgetControllerClass;
+	TSubclassOf<UTDWAttributeWidgetController> OverlayWidgetControllerClass;
 
 public:
 	UTDWAttributeWidgetController* GetOverlayWidgetController(const FTDWWidgetControllerParams& WCParams);

@@ -33,7 +33,10 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	FGameplayTag EventTag;
-	
+	// Trace origin socket.
+	UPROPERTY(EditAnywhere, meta = (AnimNotifyBoneName = "true"))
+	FName SocketName;
+	// Radius of the trace.
 	UPROPERTY(EditAnywhere)
 	float Radius = 150.0f;
 	

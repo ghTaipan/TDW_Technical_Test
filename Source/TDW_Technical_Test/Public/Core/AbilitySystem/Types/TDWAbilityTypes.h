@@ -40,7 +40,7 @@ struct FTDWAbilitySystemInitializationSpec
 	
 	// An array of Attribute Sets to create.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSoftClassPtr<UAttributeSet>> AttributeSets;
+	TArray<TSubclassOf<UAttributeSet>> AttributeSets;
 
 	// A map of Attributes / float used to set base values.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -48,11 +48,11 @@ struct FTDWAbilitySystemInitializationSpec
 
 	// An Array of Gameplay Abilities to give.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSoftClassPtr<UGameplayAbility>> GameplayAbilities;
+	TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities;
 
 	// An array of Gameplay Effects to apply.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	TArray<TSoftClassPtr<UGameplayEffect>> GameplayEffects;
+	TArray<TSubclassOf<UGameplayEffect>> GameplayEffects;
 
 	// A container of GameplayTags to apply.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)

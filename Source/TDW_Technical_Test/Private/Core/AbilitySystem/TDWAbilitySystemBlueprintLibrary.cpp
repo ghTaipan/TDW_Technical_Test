@@ -20,16 +20,14 @@ FGameplayEffectContextHandle UTDWAbilitySystemBlueprintLibrary::ApplyDamageEffec
 	EffectContextHandle.AddSourceObject(SourceAvatarActor);
 	EffectContextHandle.AddHitResult(*DamageEffectContext.GetHitResult(), true);
 	SetDamageSpec(EffectContextHandle, DamageSpecifier);
-	
-	TSoftClassPtr<UGameplayEffect> DamageEffectClass = DamageSpecifier.DamageEffectClass;
-	const TSubclassOf<UGameplayEffect>& EffectClass =  UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(DamageEffectClass);
-	if (!ensure(::IsValid(EffectClass)))
+
+	if (!ensure(DamageSpecifier.IsValid()))
 	{
 		return FGameplayEffectContextHandle();
 	}
 	
 	// Make Spec
-	const FGameplayEffectSpecHandle& SpecHandle = SourceAbilitySystemComponent->MakeOutgoingSpec(EffectClass, DamageSpecifier.DamageLevel,EffectContextHandle);
+	const FGameplayEffectSpecHandle& SpecHandle = SourceAbilitySystemComponent->MakeOutgoingSpec(DamageSpecifier.DamageEffectClass, DamageSpecifier.DamageLevel,EffectContextHandle);
 	if (!ensure(SpecHandle.IsValid() && SpecHandle.Data.IsValid()))
 	{
 		return FGameplayEffectContextHandle();

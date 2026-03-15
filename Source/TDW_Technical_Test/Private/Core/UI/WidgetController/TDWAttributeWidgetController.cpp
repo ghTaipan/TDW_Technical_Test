@@ -33,7 +33,7 @@ void UTDWAttributeWidgetController::BindCallbacksToDependencies()
 		}
 		for (const auto& Pair : TDWAS->GetTagsToAttributes())
 		{
-			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value).AddLambda(
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value).AddWeakLambda(this, 
 				[this, Pair](const FOnAttributeChangeData& Data)
 				{
 					BroadCastAttributeInfo(Pair.Key, Pair.Value);

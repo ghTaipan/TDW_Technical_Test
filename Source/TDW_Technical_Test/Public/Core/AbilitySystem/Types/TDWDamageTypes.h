@@ -13,13 +13,15 @@ struct FTDWDamageSpec
 {
 	GENERATED_BODY()
 	
+	bool IsValid() const;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TWeakObjectPtr<AActor> DamageApplier;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TWeakObjectPtr<AActor> DamageReceiver;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSoftClassPtr<UGameplayEffect> DamageEffectClass;
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<FGameplayTag, FScalableFloat> DamageTypesToDamages;

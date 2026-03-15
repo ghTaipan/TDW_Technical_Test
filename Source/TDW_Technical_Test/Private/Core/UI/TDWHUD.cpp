@@ -34,10 +34,9 @@ UTDWAttributeWidgetController* ATDWHUD::GetOverlayWidgetController(const FTDWWid
 {
 	if (!IsValid(OverlayWidgetController))
 	{
-		const TSubclassOf<UTDWAttributeWidgetController> WCClass = UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(OverlayWidgetControllerClass);
-		if (IsValid(WCClass))
+		if (ensure(IsValid(OverlayWidgetControllerClass)))
 		{
-			OverlayWidgetController = NewObject<UTDWAttributeWidgetController>(this, WCClass);
+			OverlayWidgetController = NewObject<UTDWAttributeWidgetController>(this, OverlayWidgetControllerClass);
 			OverlayWidgetController->SetWidgetControllerParams(WCParams);
 			OverlayWidgetController->BindCallbacksToDependencies();
 		}

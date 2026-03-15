@@ -48,9 +48,9 @@ void ATDWPlayerCharacter::InitializeAbilitySystem(const FTDWAbilitySystemInitial
 	if (IsValid(TDWHUD))
 	{
 		TArray<const UAttributeSet*> AttributeSets;
-		for (TSoftClassPtr<UAttributeSet> Elem : InitData.AttributeSets)
+		for (const TSubclassOf<UAttributeSet>& Elem : InitData.AttributeSets)
 		{
-			const UAttributeSet* AS = AbilitySystemComponent->GetAttributeSet(UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(Elem));
+			const UAttributeSet* AS = AbilitySystemComponent->GetAttributeSet(Elem);
 			if (IsValid(AS))
 			{
 				AttributeSets.Add(AS);

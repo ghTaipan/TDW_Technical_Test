@@ -34,7 +34,7 @@ private:
 	UPROPERTY()
 	TObjectPtr<UTDWAttributeWidgetController> EnemyWidgetController;
 	UPROPERTY(EditAnywhere, Category = "Config|Widgets")
-	TSoftClassPtr<UTDWAttributeWidgetController> EnemyWidgetControllerClass;
+	TSubclassOf<UTDWAttributeWidgetController> EnemyWidgetControllerClass;
 	
 	FDelegateHandle ShowHealthBarTagChangedDelegateHandle;
 };

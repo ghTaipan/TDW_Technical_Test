@@ -30,16 +30,15 @@ void ATDWAICharacter::BeginPlay()
 		{
 			HealthBarWidgetComp->SetVisibility(false);
 			UTDWUserWidget* HealthBarWidget = Cast<UTDWUserWidget>(HealthBarWidgetComp->GetWidget());
-            
-			UClass* WCClass = UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(EnemyWidgetControllerClass);
-			if (IsValid(HealthBarWidget) && IsValid(WCClass))
+			
+			if (IsValid(HealthBarWidget) && IsValid(EnemyWidgetControllerClass))
 			{
-				EnemyWidgetController = NewObject<UTDWAttributeWidgetController>(this, WCClass);
+				EnemyWidgetController = NewObject<UTDWAttributeWidgetController>(this, EnemyWidgetControllerClass);
 				FTDWWidgetControllerParams WcParams;
             	
-				for (TSoftClassPtr<UAttributeSet> Elem : CharData->GetAbilitySystemInitializationData(CharacterSpecTags).AttributeSets)
+				for (const TSubclassOf<UAttributeSet>& Elem : CharData->GetAbilitySystemInitializationData(CharacterSpecTags).AttributeSets)
 				{
-					const UAttributeSet* AS = AbilitySystemComponent->GetAttributeSet(UTDWBlueprintFunctionLibrary::LoadAndReturnSoftClass(Elem));
+					const UAttributeSet* AS = AbilitySystemComponent->GetAttributeSet(Elem);
 					if (IsValid(AS))
 					{
 						WcParams.AttributeSets.Add(AS);
